@@ -1,0 +1,13 @@
+[project]
+name = "chatdb"
+version = "0.1.0"
+description = "Read and write macOS Messages straight out of chat.db"
+requires-python = ">=3.11"
+dependencies = ["pyobjc-framework-Cocoa", "requests"]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["chatdb"]
