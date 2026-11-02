@@ -56,10 +56,6 @@ NANOSECOND_THRESHOLD = 10**11
 # ---------------------------------------------------------------- helpers
 
 
-def _db():
-    return sqlite3.connect(f"file:{CHAT_DB}?mode=ro", uri=True)
-
-
 def _query(sql, params=()):
     """Every row the query returns, with the connection closed afterwards.
 
@@ -73,8 +69,10 @@ def _query(sql, params=()):
     database until the cyclic collector happens to run. Measured 2026-09-17:
     about ten leaked descriptors a minute, 3.9 GB resident after 22 hours, and an
     8 GB Mac that filled its swap and froze. See the README.
+
+    The connection is opened here and nowhere else, so no read can hold one open.
     """
-    with contextlib.closing(_db()) as conn:
+    with contextlib.closing(sqlite3.connect(f"file:{CHAT_DB}?mode=ro", uri=True)) as conn:
         return conn.execute(sql, params).fetchall()
 
 
